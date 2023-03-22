@@ -8,7 +8,7 @@ const stripe = require('stripe')('sk_test_51MlQ9rSBkF0GV1OMU9MK5lSLgkUtGJzy7S8vE
 const router = require('./routes/router');
 
 const app = express();
-const MONGO_URI = 'mongodb+srv://parth:P%40rth2005@cluster0.eixcpta.mongodb.net/Practical4?retryWrites=true&w=majority'
+const MONGO_URI = 'mongodb+srv://parth:<password>@cluster0.eixcpta.mongodb.net/Practical4?retryWrites=true&w=majority'
 const store = new Store({
     uri: MONGO_URI,
     collection: 'sessions'
