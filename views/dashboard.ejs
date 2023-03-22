@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <style>
+        img {
+            width: 100%;
+            height: 100%;
+        }
+
+        td {
+            width: 15%;
+        }
+
+        .display {
+            width: 75%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 2px solid grey;
+            border-radius: 15px;
+            margin: 25px;
+        }
+
+        table {
+            margin: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <center>
+        <% if(role==1 ) { %>
+            <h1><u>Super Admin Page</u></h1>
+            <br>
+            <% } %>
+
+                <% if(role==0 ) { %>
+                    <h1><u>User Page</u></h1>
+                    <br>
+                    <% } %>
+
+                        <h3>Services Table</h3>
+                        <table id="example1" class="display">
+                            <thead>
+                                <td>Services</td>
+                                <td>Customer assigned to the service</td>
+                                <td>Charges</td>
+                                <td>Update</td>
+                                <td>Delete</td>
+                            </thead>
+                            <tbody>
+                                <% for(let i=0; i<services.length; i++) { %>
+                                    <tr>
+                                        <td>
+                                            <%= services[i].services %>
+                                        </td>
+                                        <td>
+                                            <%= services[i].customerName %>
+                                        </td>
+                                        <td>
+                                            <%= services[i].amountPayable %>
+                                        </td>
+                                        <td>
+                                            <form action="/updateServices" method="post">
+                                                <input type="hidden" name="services"
+                                                    value="<%= services[i].services %>">
+                                                <button type="submit">Edit</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form action="/deleteServices" method="post">
+                                                <input type="hidden" name="services"
+                                                    value="<%= services[i].customerName %>">
+                                                <button type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+
+                        <form action="/addServices" method="post">
+                            <button type="submit">Add Services</button>
+                        </form>
+
+                        <hr>
+                        <h3>Customers Table</h3>
+                        <div class="container">
+                            <table id="example2" class="display">
+                                <thead>
+                                    <td>Customers</td>
+                                    <td>Service Assigned</td>
+                                    <td>Amount Charged</td>
+                                    <td>Update</td>
+                                    <td>Delete</td>
+                                    <td>Payment</td>
+                                </thead>
+                                <tbody>
+                                    <% for(let i=0; i<customer.length; i++) { %>
+                                        <tr>
+                                            <td>
+                                                <%= customer[i].customerName %>
+                                            </td>
+                                            <td>
+                                                <%= customer[i].serviceAssigned %>
+                                            </td>
+                                            <td>
+                                                <%= customer[i].amountCharged %>
+                                            </td>
+                                            <td>
+                                                <form action="/updateCustomer" method="post">
+                                                    <input type="hidden" name="customer"
+                                                        value="<%= customer[i].customerName %>">
+                                                    <button type="submit">Edit</button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form action="/deleteCustomers" method="post">
+                                                    <input type="hidden" name="customers"
+                                                        value="<%= customer[i].customerName %>">
+                                                    <button type="submit">Delete</button>
+                                                </form>
+                                            </td>
+
+                                            <td>
+                                                <% if(typeof customerPaid=='undefined' ) { %>
+                                                    <form action="/stripePayment" method="post">
+                                                        <input type="hidden" name="customers"
+                                                            value="<%= customer[i].customerName %>">
+                                                        <button type="submit">Pay</button>
+                                                    </form>
+                                                    <% } %>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <form action="/addCustomer" method="post">
+                            <button type="submit">Add Customer</button>
+                        </form>
+                        <br>
+
+                        <% if(role==1) { %>
+                            <hr>
+                            <h3>Users Table</h3>
+                            <table id="example3" class="display">
+                                <thead>
+                                    <tr>
+                                        <td>User's Name</td>
+                                        <td>Delete</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let i=0; i<users.length; i++) { %>
+                                        <tr>
+                                            <td>
+                                                <%= users[i].name %>
+                                            </td>
+                                            <td>
+                                                <form action="/deleteUsers" method="post">
+                                                    <input type="hidden" name="users" value="<%= users[i].name %>">
+                                                    <button type="submit">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                            <form action="/addUser" method="post">
+                                <button type="submit">Add User</button>
+                            </form>
+                            <br>
+                            <% } %>
+
+                                <form action="/logout" method="post">
+                                    <button type="submit">Log Out</button>
+                                </form>
+    </center>
+</body>
+
+<script>
+    $(document).ready(function () {
+        $('#example1').DataTable();
+    });
+    $(document).ready(function () {
+        $('#example2').DataTable();
+    });
+    $(document).ready(function () {
+        $('#example3').DataTable();
+    });
+</script>
+
+</html>
